@@ -1,0 +1,177 @@
+.home-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.home-content {
+    max-width: 1000px;
+    width: 100%;
+}
+
+.home-content h1 {
+    color: white;
+    font-size: 48px;
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.home-content>p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.library-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.library-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-radius: 16px;
+    padding: 40px 30px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    border: 3px solid transparent;
+}
+
+.library-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.library-card.framer-card:hover {
+    border-color: #667eea;
+}
+
+.library-card.gsap-card:hover {
+    border-color: #764ba2;
+}
+
+.library-icon {
+    font-size: 60px;
+    margin-bottom: 20px;
+}
+
+.library-card h2 {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.library-card p {
+    text-align: center;
+    color: #666;
+    margin: 0 0 25px 0;
+    line-height: 1.6;
+}
+
+.view-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.library-card:hover .view-btn {
+    transform: scale(1.05);
+}
+
+.comparison {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 40px;
+    color: white;
+}
+
+.comparison h3 {
+    font-size: 28px;
+    margin: 0 0 30px 0;
+    text-align: center;
+}
+
+.comparison table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.comparison thead {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.comparison th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.comparison td {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.comparison tbody tr:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .home-content h1 {
+        font-size: 36px;
+    }
+
+    .home-content>p {
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+
+    .library-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        margin-bottom: 40px;
+    }
+
+    .library-card {
+        padding: 30px 20px;
+    }
+
+    .library-icon {
+        font-size: 48px;
+    }
+
+    .comparison {
+        padding: 20px;
+    }
+
+    .comparison h3 {
+        font-size: 22px;
+    }
+
+    .comparison th,
+    .comparison td {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

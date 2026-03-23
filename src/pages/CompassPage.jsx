@@ -5,6 +5,10 @@ import '../styles/CompassAnimation.css';
 // ── Geometry ──────────────────────────────────────────────────────────────
 const CX = 150, CY = 150, R = 120;
 const toRad  = (d) => (d * Math.PI) / 180;
+const CIRC = 2 * Math.PI * R;          // circumference
+const ARC_LEN = (80 / 360) * CIRC;     // 80° arc dash
+const GAP_LEN = (10 / 360) * CIRC;     // 10° gap
+const DASH_OFFSET = (5 / 360) * CIRC;  // offset to align gaps at cardinals
 
 function arcPath(startDeg, endDeg) {
   const x1 = (CX + R * Math.cos(toRad(startDeg))).toFixed(3);
@@ -28,7 +32,8 @@ export default function CompassPage() {
   const resetAll = useCallback(async () => {
     const ids = ["#dot", "#nline", "#shadow", "#garc-l", "#garc-r",
       "#gy1", "#gy2", "#fring", "#needle", "#ctitle", "#rod-group", "#arc-group",
-      "#arc0", "#arc1", "#arc2", "#arc3", "#vline0", "#vline1", "#vline2", "#vline3"];
+      "#arc0", "#arc1", "#arc2", "#arc3", "#vline0", "#vline1", "#vline2", "#vline3",
+      "#split1", "#split2"];
     for (const id of ids) {
       try {
         await anim(id, { opacity: 0 }, { duration: 0.15 });
@@ -45,6 +50,8 @@ export default function CompassPage() {
     try { await anim("#ctitle", { y: 10 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#gy1", { rotate: 45 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#gy2", { rotate: -45 }, { duration: 0.01 }); } catch (_) {}
+    try { await anim("#split1", { rotate: 0, rx: R, ry: R }, { duration: 0.01 }); } catch (_) {}
+    try { await anim("#split2", { rotate: 0, rx: R, ry: R }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#arc-clip-rect", { height: 0 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#vline-clip-rect", { height: 0 }, { duration: 0.01 }); } catch (_) {}
     ARC_SEGMENTS.forEach((_, i) => {
@@ -88,10 +95,20 @@ export default function CompassPage() {
       await new Promise((r) => setTimeout(r, 1800));
     }
 
-    // Step 3: Needle line grows downward from dot
+    // Step 3: Split circle into two tilted orbits
     if (step >= 3) {
-      await anim("#nline", { pathLength: 1, opacity: 0.9 }, {
-        duration: 0.88, ease: [0.25, 0.1, 0.25, 1],
+      // Show both split circles (starting as overlapping full circles)
+      anim("#split1", { opacity: 1 }, { duration: 0.01 });
+      anim("#split2", { opacity: 1 }, { duration: 0.01 });
+      // Fade out the arc-group
+      anim("#arc-group", { opacity: 0 }, { duration: 0.3 });
+      // Animate split1 to tilt +50° and flatten
+      anim("#split1", { rotate: 50, ry: R * 0.3 }, {
+        duration: 1.4, ease: [0.4, 0, 0.2, 1],
+      });
+      // Animate split2 to tilt -50° and flatten
+      await anim("#split2", { rotate: -50, ry: R * 0.3 }, {
+        duration: 1.4, ease: [0.4, 0, 0.2, 1],
       });
     }
 
@@ -195,6 +212,27 @@ export default function CompassPage() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
+              {/* 3D depth gradients for split disks */}
+              <linearGradient id="disk1Grad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%"   stopColor="#E83030" stopOpacity="1" />
+                <stop offset="40%"  stopColor="#D42020" stopOpacity="0.9" />
+                <stop offset="70%"  stopColor="#8B1A1A" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#6B1010" stopOpacity="0.15" />
+              </linearGradient>
+              <linearGradient id="disk2Grad" x1="1" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stopColor="#E83030" stopOpacity="1" />
+                <stop offset="40%"  stopColor="#C01818" stopOpacity="0.9" />
+                <stop offset="70%"  stopColor="#7A1212" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="#5A0A0A" stopOpacity="0.15" />
+              </linearGradient>
+              <filter id="diskShadow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="shadow" />
+                <feColorMatrix in="shadow" type="matrix" values="0 0 0 0 0.3  0 0 0 0 0  0 0 0 0 0  0 0 0 0.3 0" result="colorShadow" />
+                <feMerge>
+                  <feMergeNode in="colorShadow" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
               <clipPath id="arc-reveal">
                 <motion.rect id="arc-clip-rect" x="0" y={CY - R - 20} width="300" height="0" />
               </clipPath>
@@ -288,6 +326,30 @@ export default function CompassPage() {
                 ))}
               </motion.g>
             </g>
+
+            {/* Split circles for step 3 — start as full circles, tilt into crossed orbits */}
+            <motion.ellipse
+              id="split1"
+              cx={CX} cy={CY}
+              fill="none" stroke="url(#disk1Grad)" strokeWidth="12" strokeLinecap="round"
+              pathLength={360}
+              strokeDasharray="80 10"
+              strokeDashoffset={-5}
+              filter="url(#diskShadow)"
+              initial={{ opacity: 0, rotate: 0, rx: R, ry: R }}
+              style={{ transformOrigin: `${CX}px ${CY}px` }}
+            />
+            <motion.ellipse
+              id="split2"
+              cx={CX} cy={CY}
+              fill="none" stroke="url(#disk2Grad)" strokeWidth="10" strokeLinecap="round"
+              pathLength={360}
+              strokeDasharray="80 10"
+              strokeDashoffset={-5}
+              filter="url(#diskShadow)"
+              initial={{ opacity: 0, rotate: 0, rx: R, ry: R }}
+              style={{ transformOrigin: `${CX}px ${CY}px` }}
+            />
 
             {/* Full ring (momentary flash) */}
             <motion.circle

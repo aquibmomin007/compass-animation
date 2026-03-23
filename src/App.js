@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import FramerPage from './pages/FramerPage';
-import GSAPPage from './pages/GSAPPage';
+import CompassPage from './pages/CompassPage';
 import './App.css';
 
 function App() {
@@ -10,8 +9,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/framer" element={<FramerPage />} />
-          <Route path="/gsap" element={<GSAPPage />} />
+          <Route path="/compass" element={<CompassPage />} />
         </Routes>
       </div>
     </Router>

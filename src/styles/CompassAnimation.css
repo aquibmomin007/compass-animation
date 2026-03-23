@@ -88,6 +88,11 @@
     cursor: not-allowed;
 }
 
+.control-btn.active-step {
+    background-color: #a8172a;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.35);
+}
+
 .control-btn.reset-btn {
     background-color: #95a5a6;
 }
@@ -145,6 +150,21 @@
     width: 400px;
     height: 400px;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
+    transform-style: preserve-3d;
+}
+
+.compass-stage {
+    position: relative;
+    width: 400px;
+    height: 400px;
+}
+
+.compass-layer {
+    position: absolute;
+    inset: 0;
+}
+
+.frame-m-svg {
     transform-style: preserve-3d;
 }
 
@@ -248,6 +268,11 @@
     }
 
     .compass-svg {
+        width: 300px;
+        height: 300px;
+    }
+
+    .compass-stage {
         width: 300px;
         height: 300px;
     }

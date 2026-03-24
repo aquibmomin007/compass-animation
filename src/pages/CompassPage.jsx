@@ -33,7 +33,7 @@ export default function CompassPage() {
     const ids = ["#dot", "#nline", "#shadow", "#garc-l", "#garc-r",
       "#gy1", "#gy2", "#fring", "#needle", "#ctitle", "#rod-group", "#arc-group",
       "#arc0", "#arc1", "#arc2", "#arc3", "#vline0", "#vline1", "#vline2", "#vline3",
-      "#split1", "#split2"];
+      "#split1", "#split2", "#spin-circle"];
     for (const id of ids) {
       try {
         await anim(id, { opacity: 0 }, { duration: 0.15 });
@@ -52,6 +52,7 @@ export default function CompassPage() {
     try { await anim("#gy2", { rotate: -45 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#split1", { rotate: 0, rx: R, ry: R }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#split2", { rotate: 0, rx: R, ry: R }, { duration: 0.01 }); } catch (_) {}
+    try { await anim("#spin-circle", { rotate: 0 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#arc-clip-rect", { height: 0 }, { duration: 0.01 }); } catch (_) {}
     try { await anim("#vline-clip-rect", { height: 0 }, { duration: 0.01 }); } catch (_) {}
     ARC_SEGMENTS.forEach((_, i) => {
@@ -95,57 +96,30 @@ export default function CompassPage() {
       await new Promise((r) => setTimeout(r, 1800));
     }
 
-    // Step 3: Split circle into two tilted orbits
+    // Step 3: Split into two orbits, merge back, and spin — all seamless
     if (step >= 3) {
-      // Show both split circles (starting as overlapping full circles)
+      // Show both split circles
       anim("#split1", { opacity: 1 }, { duration: 0.01 });
       anim("#split2", { opacity: 1 }, { duration: 0.01 });
       // Fade out the arc-group
       anim("#arc-group", { opacity: 0 }, { duration: 0.3 });
-      // Animate split1 to tilt +50° and flatten
-      anim("#split1", { rotate: 50, ry: R * 0.3 }, {
-        duration: 1.4, ease: [0.4, 0, 0.2, 1],
+
+      // Unmerge and merge back in one seamless motion using keyframes
+      // Per-segment easing: easeIn into split, easeOut out of merge — no pause at midpoint
+      anim("#split1", { rotate: [0, 50, 180], ry: [R, R * 0.3, R] }, {
+        duration: 2.4, ease: ["easeIn", "easeOut"],
       });
-      // Animate split2 to tilt -50° and flatten
-      await anim("#split2", { rotate: -50, ry: R * 0.3 }, {
-        duration: 1.4, ease: [0.4, 0, 0.2, 1],
+      await anim("#split2", { rotate: [0, -50, -180], ry: [R, R * 0.3, R] }, {
+        duration: 2.4, ease: ["easeIn", "easeOut"],
       });
-    }
 
-    // Step 4: Gyroscope / calibration sweep
-    if (step >= 4) {
-      anim("#gy1", { opacity: 0.72 }, { duration: 0.22 });
-      await new Promise((r) => setTimeout(r, 90));
-      anim("#gy2", { opacity: 0.72 }, { duration: 0.22 });
-      anim("#gy1", { rotate: 45 + 360 }, { duration: 1.18, ease: [0.4, 0, 0.2, 1] });
-      await anim("#gy2", { rotate: -45 - 360 }, { duration: 1.18, ease: [0.4, 0, 0.2, 1] });
-      anim("#gy1", { opacity: 0 }, { duration: 0.32 });
-      await anim("#gy2", { opacity: 0 }, { duration: 0.32 });
-    }
-
-    // Step 5: Full ring flash
-    if (step >= 5) {
-      await anim("#fring", { opacity: 1, pathLength: 1 }, { duration: 0.22, ease: "easeOut" });
-      await new Promise((r) => setTimeout(r, 195));
-      await anim("#fring", { opacity: 0 }, { duration: 0.22 });
-    }
-
-    // Step 6: Needle locks to north with oscillation
-    if (step >= 6) {
-      anim("#dot", { opacity: 0 }, { duration: 0.18 });
-      anim("#nline", { opacity: 0 }, { duration: 0.18 });
-      anim("#shadow", { opacity: 0 }, { duration: 0.18 });
-      await new Promise((r) => setTimeout(r, 150));
-      await anim("#needle", { opacity: 1 }, { duration: 0.08 });
-      await anim("#needle",
-        { rotate: [112, -38, 19, -9, 4, -1, 0] },
-        { duration: 1.05, ease: "easeOut" }
-      );
-    }
-
-    // Step 7: Label fades in
-    if (step >= 7) {
-      await anim("#ctitle", { opacity: 1, y: 0 }, { duration: 0.55, ease: "easeOut" });
+      // Phase 3: Swap to spin circle and spin
+      anim("#split1", { opacity: 0 }, { duration: 0.15 });
+      anim("#split2", { opacity: 0 }, { duration: 0.15 });
+      anim("#spin-circle", { opacity: 1 }, { duration: 0.15 });
+      await anim("#spin-circle", { rotate: 720 }, {
+        duration: 2.0, ease: [0.4, 0, 0.2, 1],
+      });
     }
   }, [anim, resetAll]);
 
@@ -160,7 +134,7 @@ export default function CompassPage() {
       </div>
 
       <div className="step-controls">
-        {[1, 2, 3, 4, 5, 6, 7].map((step) => (
+        {[1, 2, 3].map((step) => (
           <button
             key={step}
             onClick={() => goToStep(step)}
@@ -350,6 +324,21 @@ export default function CompassPage() {
               initial={{ opacity: 0, rotate: 0, rx: R, ry: R }}
               style={{ transformOrigin: `${CX}px ${CY}px` }}
             />
+
+            {/* Spinning circle for step 4 — same gaps as arc-group */}
+            <motion.g
+              id="spin-circle"
+              initial={{ opacity: 0, rotate: 0 }}
+              style={{ transformOrigin: `${CX}px ${CY}px` }}
+            >
+              <circle
+                cx={CX} cy={CY} r={R}
+                fill="none" stroke="url(#disk1Grad)" strokeWidth="10" strokeLinecap="round"
+                pathLength="360"
+                strokeDasharray="80 10"
+                strokeDashoffset="-5"
+              />
+            </motion.g>
 
             {/* Full ring (momentary flash) */}
             <motion.circle

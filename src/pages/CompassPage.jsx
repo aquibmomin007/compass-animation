@@ -212,18 +212,18 @@ export default function CompassPage() {
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
-              {/* 3D depth gradients for split disks */}
-              <linearGradient id="disk1Grad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%"   stopColor="#E83030" stopOpacity="1" />
-                <stop offset="40%"  stopColor="#D42020" stopOpacity="0.9" />
-                <stop offset="70%"  stopColor="#8B1A1A" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#6B1010" stopOpacity="0.15" />
+              {/* 3D depth gradients for split disks — light left, dark right */}
+              <linearGradient id="disk1Grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#D47070" stopOpacity="0.5" />
+                <stop offset="35%"  stopColor="#C84040" stopOpacity="0.7" />
+                <stop offset="65%"  stopColor="#A02020" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#6B0A0A" stopOpacity="1" />
               </linearGradient>
-              <linearGradient id="disk2Grad" x1="1" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor="#E83030" stopOpacity="1" />
-                <stop offset="40%"  stopColor="#C01818" stopOpacity="0.9" />
-                <stop offset="70%"  stopColor="#7A1212" stopOpacity="0.4" />
-                <stop offset="100%" stopColor="#5A0A0A" stopOpacity="0.15" />
+              <linearGradient id="disk2Grad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%"   stopColor="#D47070" stopOpacity="0.5" />
+                <stop offset="35%"  stopColor="#C84040" stopOpacity="0.7" />
+                <stop offset="65%"  stopColor="#A02020" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#6B0A0A" stopOpacity="1" />
               </linearGradient>
               <filter id="diskShadow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="shadow" />

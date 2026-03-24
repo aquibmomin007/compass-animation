@@ -3,7 +3,7 @@ import { motion, useAnimate } from "framer-motion";
 import '../styles/CompassAnimation.css';
 
 // ── Geometry ──────────────────────────────────────────────────────────────
-const CX = 150, CY = 150, R = 120;
+const CX = 200, CY = 200, R = 200;
 const toRad  = (d) => (d * Math.PI) / 180;
 const CIRC = 2 * Math.PI * R;          // circumference
 const ARC_LEN = (80 / 360) * CIRC;     // 80° arc dash
@@ -113,12 +113,17 @@ export default function CompassPage() {
         duration: 2.4, ease: ["easeIn", "easeOut"],
       });
 
-      // Phase 3: Swap to spin circle and spin
+      // Phase 3: Swap to spin circle + needle, spin together and decelerate
       anim("#split1", { opacity: 0 }, { duration: 0.15 });
       anim("#split2", { opacity: 0 }, { duration: 0.15 });
       anim("#spin-circle", { opacity: 1 }, { duration: 0.15 });
-      await anim("#spin-circle", { rotate: 720 }, {
-        duration: 2.0, ease: [0.4, 0, 0.2, 1],
+      anim("#needle", { opacity: 1 }, { duration: 0.15 });
+      // Both spin together: 2 full turns with deceleration
+      anim("#spin-circle", { rotate: 720 }, {
+        duration: 2.5, ease: [0.4, 0, 0.15, 1],
+      });
+      await anim("#needle", { rotate: 720 }, {
+        duration: 2.5, ease: [0.4, 0, 0.15, 1],
       });
     }
   }, [anim, resetAll]);
@@ -148,7 +153,7 @@ export default function CompassPage() {
         </button>
       </div>
 
-      <div className="animation-wrapper" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden" }}>
+      <div className="animation-wrapper" style={{ background: "#FFFFFF", position: "relative", overflow: "hidden", width: 600, height: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         {/* Film grain overlay */}
         <svg
           aria-hidden="true"
@@ -166,7 +171,7 @@ export default function CompassPage() {
         </svg>
 
         <div ref={scope} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <svg viewBox="0 0 300 300" width={300} height={300} style={{ overflow: "visible" }}>
+          <svg viewBox="0 0 400 400" width={400} height={400} style={{ overflow: "visible" }}>
             <defs>
               <radialGradient id="ambientGlow" cx="50%" cy="50%" r="50%">
                 <stop offset="0%"   stopColor="#8B1A1A" stopOpacity="0.18" />
@@ -208,10 +213,10 @@ export default function CompassPage() {
                 </feMerge>
               </filter>
               <clipPath id="arc-reveal">
-                <motion.rect id="arc-clip-rect" x="0" y={CY - R - 20} width="300" height="0" />
+                <motion.rect id="arc-clip-rect" x="-20" y="-20" width="472" height="0" />
               </clipPath>
               <clipPath id="vline-reveal">
-                <motion.rect id="vline-clip-rect" x="0" y={CY - R - 10} width="300" height="0" />
+                <motion.rect id="vline-clip-rect" x="-20" y="-20" width="472" height="0" />
               </clipPath>
             </defs>
 
@@ -262,19 +267,19 @@ export default function CompassPage() {
               {/* Segment 1: top-right arc [-85° to -5°] → y from sin(-85°)=-0.996R to sin(-5°)=-0.087R */}
               <motion.line id="vline0"
                 x1={CX} y1={CY + R * Math.sin(toRad(-85))} x2={CX} y2={CY + R * Math.sin(toRad(-5))}
-                stroke="#D42020" strokeWidth="10" strokeLinecap="round" initial={{ opacity: 0 }} />
+                stroke="#D42020" strokeWidth="22" strokeLinecap="round" initial={{ opacity: 0 }} />
               {/* Segment 2: bottom-right arc [5° to 85°] */}
               <motion.line id="vline1"
                 x1={CX} y1={CY + R * Math.sin(toRad(5))} x2={CX} y2={CY + R * Math.sin(toRad(85))}
-                stroke="#D42020" strokeWidth="10" strokeLinecap="round" initial={{ opacity: 0 }} />
+                stroke="#D42020" strokeWidth="22" strokeLinecap="round" initial={{ opacity: 0 }} />
               {/* Segment 3: bottom-left arc [95° to 175°] */}
               <motion.line id="vline2"
                 x1={CX} y1={CY + R * Math.sin(toRad(95))} x2={CX} y2={CY + R * Math.sin(toRad(175))}
-                stroke="#D42020" strokeWidth="10" strokeLinecap="round" initial={{ opacity: 0 }} />
+                stroke="#D42020" strokeWidth="22" strokeLinecap="round" initial={{ opacity: 0 }} />
               {/* Segment 4: top-left arc [185° to 265°] */}
               <motion.line id="vline3"
                 x1={CX} y1={CY + R * Math.sin(toRad(185))} x2={CX} y2={CY + R * Math.sin(toRad(265))}
-                stroke="#D42020" strokeWidth="10" strokeLinecap="round" initial={{ opacity: 0 }} />
+                stroke="#D42020" strokeWidth="22" strokeLinecap="round" initial={{ opacity: 0 }} />
             </g>
 
             {/* Four dashed arc segments — wrapped for 3D Y-axis rotation */}
@@ -293,7 +298,7 @@ export default function CompassPage() {
                     d={arcPath(s, e)}
                     fill="none"
                     stroke="#D42020"
-                    strokeWidth="10"
+                    strokeWidth="22"
                     strokeLinecap="round"
                     initial={{ pathLength: 0, opacity: 0 }}
                   />
@@ -305,7 +310,7 @@ export default function CompassPage() {
             <motion.ellipse
               id="split1"
               cx={CX} cy={CY}
-              fill="none" stroke="url(#disk1Grad)" strokeWidth="12" strokeLinecap="round"
+              fill="none" stroke="url(#disk1Grad)" strokeWidth="22" strokeLinecap="round"
               pathLength={360}
               strokeDasharray="80 10"
               strokeDashoffset={-5}
@@ -316,7 +321,7 @@ export default function CompassPage() {
             <motion.ellipse
               id="split2"
               cx={CX} cy={CY}
-              fill="none" stroke="url(#disk2Grad)" strokeWidth="10" strokeLinecap="round"
+              fill="none" stroke="url(#disk2Grad)" strokeWidth="22" strokeLinecap="round"
               pathLength={360}
               strokeDasharray="80 10"
               strokeDashoffset={-5}
@@ -333,7 +338,7 @@ export default function CompassPage() {
             >
               <circle
                 cx={CX} cy={CY} r={R}
-                fill="none" stroke="url(#disk1Grad)" strokeWidth="10" strokeLinecap="round"
+                fill="none" stroke="url(#disk1Grad)" strokeWidth="22" strokeLinecap="round"
                 pathLength="360"
                 strokeDasharray="80 10"
                 strokeDashoffset="-5"
@@ -375,23 +380,33 @@ export default function CompassPage() {
               />
             </motion.g>
 
-            {/* Final compass needle (diamond) */}
+            {/* Final compass needle: 256px tall, 72px wide, red north, black south */}
             <motion.g
               id="needle"
               initial={{ opacity: 0, rotate: 0 }}
-              style={{ transformOrigin: `${CX}px ${CY}px`, filter: "url(#needleGlow)" }}
+              style={{ transformOrigin: `${CX}px ${CY}px` }}
             >
-              <path
-                d={`M ${CX} 58 L ${CX + 14} ${CY} L ${CX} ${CY - 5} L ${CX - 14} ${CY} Z`}
-                fill="#8B1A1A"
+              {/* Red (north/up) half */}
+              <polygon
+                points={`
+                  ${CX - 36},${CY} 
+                  ${CX},${CY - 128} 
+                  ${CX + 36},${CY}
+                `}
+                fill="#D42020"
               />
-              <path
-                d={`M ${CX} 242 L ${CX + 14} ${CY} L ${CX} ${CY + 5} L ${CX - 14} ${CY} Z`}
-                fill="#282828"
+              {/* Black (south/down) half */}
+              <polygon
+                points={`
+                  ${CX - 36},${CY} 
+                  ${CX},${CY + 128} 
+                  ${CX + 36},${CY}
+                `}
+                fill="#222"
               />
-              <circle cx={CX} cy={CY} r={8}   fill="#C2C2C2" />
-              <circle cx={CX} cy={CY} r={4.5} fill="#8B1A1A" />
-              <circle cx={CX} cy={CY} r={1.8} fill="#E8E8E8" />
+              {/* Center hub */}
+              <circle cx={CX} cy={CY} r={18} fill="#fff" stroke="#bbb" strokeWidth="2" />
+              <circle cx={CX} cy={CY} r={7} fill="#D42020" />
             </motion.g>
           </svg>
 
@@ -415,13 +430,9 @@ export default function CompassPage() {
       </div>
 
       <div className="step-indicators">
-        <div className={`step ${currentStep === 1 ? 'active-step' : ''}`}>Step 1: Dot at north</div>
-        <div className={`step ${currentStep === 2 ? 'active-step' : ''}`}>Step 2: Needle grows down</div>
-        <div className={`step ${currentStep === 3 ? 'active-step' : ''}`}>Step 3: Arc segments draw</div>
-        <div className={`step ${currentStep === 4 ? 'active-step' : ''}`}>Step 4: Gyroscope sweep</div>
-        <div className={`step ${currentStep === 5 ? 'active-step' : ''}`}>Step 5: Ring flash</div>
-        <div className={`step ${currentStep === 6 ? 'active-step' : ''}`}>Step 6: Needle settles</div>
-        <div className={`step ${currentStep === 7 ? 'active-step' : ''}`}>Step 7: Label revealed</div>
+        <div className={`step ${currentStep === 1 ? 'active-step' : ''}`}>Step 1: Line formation</div>
+        <div className={`step ${currentStep === 2 ? 'active-step' : ''}`}>Step 2: Circle expand</div>
+        <div className={`step ${currentStep === 3 ? 'active-step' : ''}`}>Step 3: Split, merge &amp; needle</div>
       </div>
     </div>
   );

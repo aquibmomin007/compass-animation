@@ -125,6 +125,27 @@ export default function CompassPage() {
       await anim("#needle", { rotate: 720 }, {
         duration: 2.5, ease: [0.4, 0, 0.15, 1],
       });
+
+      // After animation completes, set arc colors to #e60000 with a slight delay to ensure DOM is updated
+      setTimeout(() => {
+        for (let i = 0; i < 4; i++) {
+          const arc = document.getElementById(`arc${i}`);
+          if (arc) {
+            arc.setAttribute('stroke', '#e60000');
+            if (arc.getAttribute('stroke').includes('url(')) {
+              arc.setAttribute('stroke', '#e60000');
+            }
+          }
+        }
+        // Also update the spinning circle
+        const spinCircle = document.querySelector('#spin-circle circle');
+        if (spinCircle) {
+          spinCircle.setAttribute('stroke', '#e60000');
+          if (spinCircle.getAttribute('stroke').includes('url(')) {
+            spinCircle.setAttribute('stroke', '#e60000');
+          }
+        }
+      }, 100);
     }
   }, [anim, resetAll]);
 
@@ -138,18 +159,13 @@ export default function CompassPage() {
         </nav>
       </div>
 
-      <div className="step-controls">
-        {[1, 2, 3].map((step) => (
-          <button
-            key={step}
-            onClick={() => goToStep(step)}
-            className={`control-btn ${currentStep === step ? 'active-step' : ''}`}
-          >
-            Step {step}
-          </button>
-        ))}
-        <button onClick={resetAll} className="control-btn reset-btn">
-          Reset
+      <div className="step-controls" style={{ textAlign: 'center', margin: '16px 0' }}>
+        <button
+          className="control-btn run-btn"
+          onClick={() => goToStep(3)}
+          style={{ fontSize: 18, padding: '10px 32px', background: '#D42020', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' }}
+        >
+          Run Animation
         </button>
       </div>
 

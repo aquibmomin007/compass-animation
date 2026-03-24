@@ -386,27 +386,26 @@ export default function CompassPage() {
               initial={{ opacity: 0, rotate: 0 }}
               style={{ transformOrigin: `${CX}px ${CY}px` }}
             >
-              {/* Red (north/up) half */}
-              <polygon
-                points={`
-                  ${CX - 36},${CY} 
-                  ${CX},${CY - 128} 
-                  ${CX + 36},${CY}
-                `}
+              {/* Red (north/up) half — more rounded tip (25px radius) */}
+              <path
+                d={`M ${CX - 36},${CY}
+                   Q ${CX - 18},${CY - 80} ${CX - 10},${CY - 100}
+                   Q ${CX},${CY - 130} ${CX + 10},${CY - 100}
+                   Q ${CX + 18},${CY - 80} ${CX + 36},${CY}
+                   Z`}
                 fill="#D42020"
               />
-              {/* Black (south/down) half */}
-              <polygon
-                points={`
-                  ${CX - 36},${CY} 
-                  ${CX},${CY + 128} 
-                  ${CX + 36},${CY}
-                `}
+              {/* Black (south/down) half — rounded tip */}
+              <path
+                d={`M ${CX - 36},${CY}
+                   Q ${CX - 18},${CY + 80} ${CX - 10},${CY + 100}
+                   Q ${CX},${CY + 130} ${CX + 10},${CY + 100}
+                   Q ${CX + 18},${CY + 80} ${CX + 36},${CY}
+                   Z`}
                 fill="#222"
               />
               {/* Center hub */}
-              <circle cx={CX} cy={CY} r={18} fill="#fff" stroke="#bbb" strokeWidth="2" />
-              <circle cx={CX} cy={CY} r={7} fill="#D42020" />
+              <circle cx={CX} cy={CY} r={20} fill="#fff" stroke="#bbb" strokeWidth="2" />
             </motion.g>
           </svg>
 
@@ -429,11 +428,7 @@ export default function CompassPage() {
         </div>
       </div>
 
-      <div className="step-indicators">
-        <div className={`step ${currentStep === 1 ? 'active-step' : ''}`}>Step 1: Line formation</div>
-        <div className={`step ${currentStep === 2 ? 'active-step' : ''}`}>Step 2: Circle expand</div>
-        <div className={`step ${currentStep === 3 ? 'active-step' : ''}`}>Step 3: Split, merge &amp; needle</div>
-      </div>
+      {/* Step indicators removed: animation is now static and triggered by reload */}
     </div>
   );
 }

@@ -128,22 +128,21 @@ export default function CompassPage() {
 
       // After animation completes, set arc colors to #e60000 with a slight delay to ensure DOM is updated
       setTimeout(() => {
+        // Animate color transition for arcs
         for (let i = 0; i < 4; i++) {
           const arc = document.getElementById(`arc${i}`);
           if (arc) {
+            arc.style.transition = 'stroke 0.7s cubic-bezier(0.4,0,0.2,1)';
+            // Force to #e60000, overriding gradient
             arc.setAttribute('stroke', '#e60000');
-            if (arc.getAttribute('stroke').includes('url(')) {
-              arc.setAttribute('stroke', '#e60000');
-            }
           }
         }
-        // Also update the spinning circle
+        // Animate color transition for spinning circle
         const spinCircle = document.querySelector('#spin-circle circle');
         if (spinCircle) {
+          spinCircle.style.transition = 'stroke 0.7s cubic-bezier(0.4,0,0.2,1)';
+          // Force to #e60000, overriding gradient
           spinCircle.setAttribute('stroke', '#e60000');
-          if (spinCircle.getAttribute('stroke').includes('url(')) {
-            spinCircle.setAttribute('stroke', '#e60000');
-          }
         }
       }, 100);
     }
@@ -313,7 +312,7 @@ export default function CompassPage() {
                     id={`arc${i}`}
                     d={arcPath(s, e)}
                     fill="none"
-                    stroke="#D42020"
+                    stroke="url(#arcRedWhiteGrad)"
                     strokeWidth="22"
                     strokeLinecap="round"
                     initial={{ pathLength: 0, opacity: 0 }}
@@ -354,11 +353,16 @@ export default function CompassPage() {
             >
               <circle
                 cx={CX} cy={CY} r={R}
-                fill="none" stroke="url(#disk1Grad)" strokeWidth="22" strokeLinecap="round"
+                fill="none" stroke="url(#arcRedWhiteGrad)" strokeWidth="22" strokeLinecap="round"
                 pathLength="360"
                 strokeDasharray="80 10"
                 strokeDashoffset="-5"
               />
+                        {/* Gradient for arcs and spin circle: dark red to white */}
+                        <linearGradient id="arcRedWhiteGrad" x1="0" y1="0" x2="1" y2="1">
+                          <stop offset="0%" stopColor="#8B1A1A" />
+                          <stop offset="100%" stopColor="#fff" />
+                        </linearGradient>
             </motion.g>
 
             {/* Full ring (momentary flash) */}

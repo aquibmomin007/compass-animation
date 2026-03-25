@@ -31,39 +31,39 @@ export default function CMenuPage() {
   };
   // Arc index mapping to match visual quadrant
   const arcIndex = {
-    vorsorgen: 0,      // top left
-    sparen: 1,        // top right
-    bezahlen: 3,      // bottom left
-    finanzieren: 2    // bottom right
+    vorsorgen: 3,      // top left
+    sparen: 0,         // top right
+    bezahlen: 2,       // bottom left
+    finanzieren: 1     // bottom right
   };
   // Content for each block
   const blockContent = {
     vorsorgen: (
-      <div>
-        <div style={{ color: '#b00', borderLeft: '5px solid #b00', paddingLeft: 12, fontSize: 38, fontWeight: 600, marginBottom: 8 }}>Vorsorgen</div>
+      <div style={{ paddingLeft: 20 }}>
+        <div style={{ color: '#060606', fontSize: 38, fontWeight: 500, marginBottom: 8 }}>Vorsorgen</div>
         <div style={{ fontSize: 22, color: '#444', marginBottom: 2 }}>3. Säule</div>
         <div style={{ fontSize: 22, color: '#444' }}>Finanzplan</div>
       </div>
     ),
     sparen: (
-      <div>
-        <div style={{ color: '#b00', borderRight: '5px solid #b00', paddingRight: 12, fontSize: 38, fontWeight: 600, marginBottom: 8, textAlign: 'right' }}>Sparen & Anlegen</div>
+      <div style={{ paddingRight: 20 }}>
+        <div style={{ color: '#222', fontSize: 38, fontWeight: 500, marginBottom: 8, textAlign: 'right' }}>Sparen & Anlegen</div>
         <div style={{ fontSize: 22, color: '#444', textAlign: 'right', marginBottom: 2 }}>Beratung</div>
         <div style={{ fontSize: 22, color: '#444', textAlign: 'right' }}>Review</div>
       </div>
     ),
     bezahlen: (
-      <div>
-        <div style={{ color: '#b00', borderLeft: '5px solid #b00', paddingLeft: 12, fontSize: 38, fontWeight: 600, marginBottom: 8 }}>Bezahlen</div>
+      <div style={{ paddingLeft: 20 }}>
         <div style={{ fontSize: 22, color: '#444', marginBottom: 2 }}>Konten</div>
         <div style={{ fontSize: 22, color: '#444', marginBottom: 2 }}>Karten</div>
         <div style={{ fontSize: 22, color: '#444' }}>Spezialangebote</div>
+        <div style={{ color: '#222', fontSize: 38, fontWeight: 500, marginBottom: 8 }}>Bezahlen</div>
       </div>
     ),
     finanzieren: (
-      <div>
-        <div style={{ color: '#b00', borderRight: '5px solid #b00', paddingRight: 12, fontSize: 38, fontWeight: 600, marginBottom: 8, textAlign: 'right' }}>Finanzieren</div>
+      <div style={{ paddingRight: 20 }}>
         <div style={{ fontSize: 22, color: '#444', textAlign: 'right', marginBottom: 2 }}>Beratung</div>
+        <div style={{ color: '#222',  fontSize: 38, fontWeight: 500, marginBottom: 8, textAlign: 'right' }}>Finanzieren</div>
       </div>
     ),
   };
@@ -114,11 +114,23 @@ export default function CMenuPage() {
             style={{ position: 'relative', overflow: 'visible', cursor: 'pointer' }}
             onClick={() => setExpanded(expanded === 'vorsorgen' ? null : 'vorsorgen')}
           >
-            <motion.p
-              variants={textVariants}
-              animate={expanded === 'vorsorgen' ? 'expanded' : 'initial'}
-              style={{ position: 'absolute', top: 24, left: 32, margin: 0, fontSize: 28, color: '#444', fontWeight: 400, cursor: 'pointer' }}
-            >Vorsorgen</motion.p>
+            <div style={{ position: 'absolute', top: 24, left: 32, display: 'flex', alignItems: 'center', height: expanded === 'vorsorgen' ? 'calc(100% - 48px)' : 'auto' }}>
+              {expanded === 'vorsorgen' && (
+                <div style={{
+                  width: 5,
+                  height: '100%',
+                  background: '#b00',
+                  marginRight: 12,
+                  transition: 'height 0.4s',
+                  alignSelf: 'stretch',
+                }} />
+              )}
+              <motion.p
+                variants={textVariants}
+                animate={expanded === 'vorsorgen' ? 'expanded' : 'initial'}
+                style={{ margin: 0, fontSize: 28, color: '#222', fontWeight: 600, cursor: 'pointer' }}
+              >Vorsorgen</motion.p>
+            </div>
             <AnimatePresence>
               {expanded === 'vorsorgen' && (
                 <motion.div
@@ -128,7 +140,7 @@ export default function CMenuPage() {
                   exit="initial"
                   variants={contentVariants}
                   transition={{ duration: 0.4 }}
-                  style={{ position: 'absolute', top: 40, left: 32, width: 340, zIndex: 10 }}
+                  style={{ position: 'absolute', top: 20, left: 32, width: 340, zIndex: 10 }}
                 >
                   {blockContent.vorsorgen}
                 </motion.div>
@@ -146,11 +158,23 @@ export default function CMenuPage() {
             style={{ position: 'relative', overflow: 'visible', cursor: 'pointer' }}
             onClick={() => setExpanded(expanded === 'sparen' ? null : 'sparen')}
           >
-            <motion.p
-              variants={textVariants}
-              animate={expanded === 'sparen' ? 'expanded' : 'initial'}
-              style={{ position: 'absolute', top: 24, right: 32, margin: 0, fontSize: 28, color: '#444', fontWeight: 400, cursor: 'pointer', textAlign: 'right', width: 'calc(100% - 64px)' }}
-            >Sparen & Anlegen</motion.p>
+            <div style={{ position: 'absolute', top: 24, right: 32, display: 'flex', alignItems: 'center', height: expanded === 'sparen' ? 'calc(100% - 48px)' : 'auto', flexDirection: 'row-reverse' }}>
+              {expanded === 'sparen' && (
+                <div style={{
+                  width: 5,
+                  height: '100%',
+                  background: '#b00',
+                  marginLeft: 12,
+                  transition: 'height 0.4s',
+                  alignSelf: 'stretch',
+                }} />
+              )}
+              <motion.p
+                variants={textVariants}
+                animate={expanded === 'sparen' ? 'expanded' : 'initial'}
+                style={{ margin: 0, fontSize: 28, color: '#222', fontWeight: 600, cursor: 'pointer', textAlign: 'right' }}
+              >Sparen & Anlegen</motion.p>
+            </div>
             <AnimatePresence>
               {expanded === 'sparen' && (
                 <motion.div
@@ -160,7 +184,7 @@ export default function CMenuPage() {
                   exit="initial"
                   variants={contentVariants}
                   transition={{ duration: 0.4 }}
-                  style={{ position: 'absolute', top: 40, right: 32, width: 340, zIndex: 10 }}
+                  style={{ position: 'absolute', top: 20, right: 32, width: 340, zIndex: 10 }}
                 >
                   {blockContent.sparen}
                 </motion.div>
@@ -178,11 +202,23 @@ export default function CMenuPage() {
             style={{ position: 'relative', overflow: 'visible', cursor: 'pointer' }}
             onClick={() => setExpanded(expanded === 'bezahlen' ? null : 'bezahlen')}
           >
-            <motion.p
-              variants={textVariants}
-              animate={expanded === 'bezahlen' ? 'expanded' : 'initial'}
-              style={{ position: 'absolute', bottom: 24, left: expanded === 'bezahlen' ? 32 : 32, margin: 0, fontSize: 28, color: '#444', fontWeight: 400, cursor: 'pointer', maxWidth: expanded === 'bezahlen' ? 636 : 370, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-            >Bezahlen</motion.p>
+            <div style={{ position: 'absolute', bottom: 24, left: 32, display: 'flex', alignItems: 'center', height: expanded === 'bezahlen' ? 'calc(100% - 48px)' : 'auto' }}>
+              {expanded === 'bezahlen' && (
+                <div style={{
+                  width: 5,
+                  height: '100%',
+                  background: '#b00',
+                  marginRight: 12,
+                  transition: 'height 0.4s',
+                  alignSelf: 'stretch',
+                }} />
+              )}
+              <motion.p
+                variants={textVariants}
+                animate={expanded === 'bezahlen' ? 'expanded' : 'initial'}
+                style={{ margin: 0, fontSize: 28, color: '#222', fontWeight: 600, cursor: 'pointer', maxWidth: expanded === 'bezahlen' ? 636 : 370, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+              >Bezahlen</motion.p>
+            </div>
             <AnimatePresence>
               {expanded === 'bezahlen' && (
                 <motion.div
@@ -192,7 +228,7 @@ export default function CMenuPage() {
                   exit="initial"
                   variants={contentVariants}
                   transition={{ duration: 0.4 }}
-                  style={{ position: 'absolute', bottom: 40, left: 32, width: 340, zIndex: 10, background: 'transparent' }}
+                  style={{ position: 'absolute', bottom: 10, left: 32, width: 340, zIndex: 10, background: 'transparent' }}
                 >
                   {blockContent.bezahlen}
                 </motion.div>
@@ -210,11 +246,23 @@ export default function CMenuPage() {
             style={{ position: 'relative', overflow: 'visible', cursor: 'pointer' }}
             onClick={() => setExpanded(expanded === 'finanzieren' ? null : 'finanzieren')}
           >
-            <motion.p
-              variants={textVariants}
-              animate={expanded === 'finanzieren' ? 'expanded' : 'initial'}
-              style={{ position: 'absolute', bottom: 24, right: 32, margin: 0, fontSize: 28, color: '#444', fontWeight: 400, cursor: 'pointer', textAlign: 'right', width: 'calc(100% - 64px)' }}
-            >Finanzieren</motion.p>
+            <div style={{ position: 'absolute', bottom: 24, right: 32, display: 'flex', alignItems: 'center', height: expanded === 'finanzieren' ? 'calc(100% - 48px)' : 'auto', flexDirection: 'row-reverse' }}>
+              {expanded === 'finanzieren' && (
+                <div style={{
+                  width: 5,
+                  height: '100%',
+                  background: '#b00',
+                  marginLeft: 12,
+                  transition: 'height 0.4s',
+                  alignSelf: 'stretch',
+                }} />
+              )}
+              <motion.p
+                variants={textVariants}
+                animate={expanded === 'finanzieren' ? 'expanded' : 'initial'}
+                style={{ margin: 0, fontSize: 28, color: '#222', fontWeight: 600, cursor: 'pointer', textAlign: 'right' }}
+              >Finanzieren</motion.p>
+            </div>
             <AnimatePresence>
               {expanded === 'finanzieren' && (
                 <motion.div
@@ -224,7 +272,7 @@ export default function CMenuPage() {
                   exit="initial"
                   variants={contentVariants}
                   transition={{ duration: 0.4 }}
-                  style={{ position: 'absolute', bottom: 40, right: 32, width: 340, zIndex: 10 }}
+                  style={{ position: 'absolute', bottom: 10, right: 32, width: 340, zIndex: 10 }}
                 >
                   {blockContent.finanzieren}
                 </motion.div>
@@ -233,7 +281,11 @@ export default function CMenuPage() {
           </motion.div>
         </div>
         {/* Overlay Compass SVG at Center */}
-        <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 2, background: 'white' }}>
+        <div
+          className="needle-container"
+          style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', pointerEvents: 'auto', zIndex: 2, background: 'white', borderRadius: '50%' }}
+          onClick={() => setExpanded(null)}
+        >
           <svg viewBox="0 0 432 432" width={432} height={432} style={{ display: 'block' }}>
             {/* Arcs: only selected arc is red, others grey */}
             {ARC_SEGMENTS.map(([s, e], i) => (
@@ -241,10 +293,10 @@ export default function CMenuPage() {
                 key={i}
                 d={arcPath(s, e)}
                 fill="none"
-                stroke={expanded && arcIndex[expanded] === i ? "#e60000" : "#ddd"}
+                stroke={expanded == null ? "#e60000" : (arcIndex[expanded] === i ? "#e60000" : "#ddd")}
                 strokeWidth="22"
                 strokeLinecap="round"
-                animate={{ stroke: expanded && arcIndex[expanded] === i ? "#e60000" : "#ddd" }}
+                animate={{ stroke: expanded == null ? "#e60000" : (arcIndex[expanded] === i ? "#e60000" : "#ddd") }}
                 transition={{ duration: 0.4 }}
               />
             ))}

@@ -155,6 +155,7 @@ export default function CompassPage() {
         <nav>
           <a href="/">Home</a>
           <a href="/compass" className="active">Compass</a>
+          <a href="/cmenu">C Menu</a>
         </nav>
       </div>
 

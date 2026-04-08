@@ -1,0 +1,21 @@
+.compassNeedle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(var(--needle-rotation, 0deg));
+  transform-origin: 50% 50%;
+  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  width: 64px;
+  height: 216px;
+  z-index: 20;
+}
+
+.compassCenterIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  z-index: 30;
+}

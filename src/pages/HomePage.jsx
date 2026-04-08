@@ -16,6 +16,13 @@ const HomePage = () => {
                         <p>Cinematic step-by-step animation with arcs, gyroscope sweep, and needle settle</p>
                         <button className="view-btn">View Animation</button>
                     </Link>
+
+                    <Link to="/compass1" className="library-card framer-card">
+                        <div className="library-icon">🧭</div>
+                        <h2>Compass 1</h2>
+                        <p>Minimal compass tab page with a neutral grey background</p>
+                        <button className="view-btn">Open Tab</button>
+                    </Link>
                 </div>
             </div>
         </div>

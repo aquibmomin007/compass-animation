@@ -88,6 +88,7 @@ export default function CMenuPage() {
         <nav style={{ marginLeft: 32 }}>
           <a href="/" style={{ marginRight: 24, color: '#444', textDecoration: 'none', fontWeight: 500 }}>Home</a>
           <a href="/compass" style={{ marginRight: 24, color: '#444', textDecoration: 'none', fontWeight: 500 }}>Compass</a>
+          <a href="/compass1" style={{ marginRight: 24, color: '#444', textDecoration: 'none', fontWeight: 500 }}>Compass 1</a>
           <a href="/cmenu" style={{ color: '#b00', textDecoration: 'underline', fontWeight: 700 }}>C Menu</a>
         </nav>
       </div>

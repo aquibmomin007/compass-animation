@@ -30,7 +30,7 @@ const ARC_CONFIG = {
   },
 };
 
-const CompassArcGroup = ({ activeQuadrant }) => {
+const CompassArcGroup = ({ activeQuadrant, isCenterMenuOpen }) => {
   const orderedKeys = ['topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 
   return (
@@ -39,14 +39,23 @@ const CompassArcGroup = ({ activeQuadrant }) => {
         const arc = ARC_CONFIG[key];
         const isActive = activeQuadrant === key;
         const showGrey = Boolean(activeQuadrant);
+        const arcUrl = isCenterMenuOpen
+          ? arc.greyUrl
+          : showGrey
+            ? (isActive ? arc.redUrl : arc.greyUrl)
+            : arc.redUrl;
 
         return (
           <CompassSvg
             key={arc.id}
             id={arc.id}
-            url={showGrey ? (isActive ? arc.redUrl : arc.greyUrl) : arc.redUrl}
+            url={arcUrl}
             alt={arc.id}
-            style={{ ...arc.style, zIndex: isActive ? 11 : 10 }}
+            style={{
+              ...arc.style,
+              zIndex: isActive ? 11 : 10,
+              transition: 'opacity 260ms cubic-bezier(0.22, 1, 0.36, 1)',
+            }}
           />
         );
       })}

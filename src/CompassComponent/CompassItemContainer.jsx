@@ -3,10 +3,13 @@ import cn from 'classnames';
 import { AnimatePresence, motion } from 'framer-motion';
 import styles from './CompassItemContainer.module.scss';
 
-const CompassItemContainer = ({ activeQuadrant, onQuadrantClick }) => {
+const CompassItemContainer = ({ activeQuadrant, onQuadrantClick, isCenterMenuOpen }) => {
   const DCS = null;
 
   const handleLabelClick = (quadrant, event) => {
+    if (isCenterMenuOpen) {
+      return;
+    }
     event.stopPropagation();
     onQuadrantClick(quadrant);
   };
@@ -107,7 +110,7 @@ const CompassItemContainer = ({ activeQuadrant, onQuadrantClick }) => {
   };
 
   return (
-    <div className={styles.compassItemWrapper}>
+    <div className={cn(styles.compassItemWrapper, isCenterMenuOpen && styles.centerMenuOpen)}>
       <motion.div
         layout
         initial={false}
